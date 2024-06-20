@@ -1,0 +1,14 @@
+---
+global:
+  scrape_interval: {{ outer_item.scrape_interval }}
+  evaluation_interval: {{ outer_item.evaluation_interval }}
+
+{{ outer_item.rule_files }}
+
+{{ outer_item.scrape_configs }}
+
+remote_write:
+  - name: mimir
+    url: {{ outer_item.mimir_url }}
+    headers:
+      X-Scope-OrgID: OrgID-1

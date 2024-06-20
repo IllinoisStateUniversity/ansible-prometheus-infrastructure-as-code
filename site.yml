@@ -1,0 +1,14 @@
+---
+- name: Prometheus - Infrastructure as Code
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files: "vars/{{ prometheus_environment }}.yml"
+
+  tasks:
+    - name: Setup Prometheus Instances
+      ansible.builtin.include_role:
+        name: prometheus
+      loop: "{{ prometheus_instances }}"
+      loop_control:
+        loop_var: outer_item

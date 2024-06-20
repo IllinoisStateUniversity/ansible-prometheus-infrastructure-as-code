@@ -1,0 +1,46 @@
+---
+- name: Create ConfigMap for Prometheus Configuration
+  redhat.openshift.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: "{{ inner_item.replica_name }}-config"
+        namespace: "{{ outer_item.namespace }}"
+      data:
+        prometheus.yml: "{{ lookup('template', 'templates/prometheus-config.yml.j2') }}"
+  loop:
+    - { replica_name: "prometheus-{{ outer_item.instance_number }}" }
+  loop_control:
+    loop_var: inner_item
+
+- name: Deploy Prometheus Instances
+  redhat.openshift.k8s:
+    state: present
+    definition: "{{ lookup('template', 'templates/prometheus-deploy.yml.j2') }}"
+  loop:
+    - { replica_name: "prometheus-{{ outer_item.instance_number }}" }
+  loop_control:
+    loop_var: inner_item
+
+- name: Expose the Prometheus Port via Services
+  redhat.openshift.k8s:
+    state: present
+    definition:
+      kind: Service
+      apiVersion: v1
+      metadata:
+        name: "{{ inner_item.replica_name }}-service"
+        namespace: "{{ outer_item.namespace }}"
+      spec:
+        selector:
+          app: "{{ inner_item.replica_name }}"
+        ports:
+          - protocol: TCP
+            port: 9090
+            targetPort: 9090
+  loop:
+    - { replica_name: "prometheus-{{ outer_item.instance_number }}" }
+  loop_control:
+    loop_var: inner_item
