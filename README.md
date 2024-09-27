@@ -1,22 +1,8 @@
-# ansible-prometheus-infrastructure-as-code
+# Prometheus - Infrastructure as Code
 
 ## Overview
 
 This Ansible playbook automates the deployment and configuration of Prometheus instances in a Kubernetes or OpenShift cluster using Infrastructure as Code (IaC) principles. It is designed to run within AAP/AWX and supports multiple environments (e.g., production, test) through environment-specific variable files.
-
-## Table of Contents
-
-- [Prerequisites](#prerequisites)
-- [Playbook Structure](#playbook-structure)
-- [Variables](#variables)
-  - [Environment Selection](#environment-selection)
-  - [Variable Files](#variable-files)
-- [Usage](#usage)
-  - [Running the Playbook](#running-the-playbook)
-- [Customization](#customization)
-- [Dependencies](#dependencies)
-- [Troubleshooting](#troubleshooting)
-- [Contact](#contact)
 
 ## Prerequisites
 
